@@ -1,0 +1,44 @@
+version: 2
+sources:
+  - name: bka_raw
+    schema: "{{ env_var('RAW_SCHEMA', 'raw_bka') }}"
+    tables:
+      - name: standort_kontakt
+        description: "Bundes-Klinik-Atlas site contact and master data."
+        columns:
+          - name: stoid
+            tests:
+              - not_null
+              - unique
+      - name: standort_struktur
+        description: "Bundes-Klinik-Atlas site structure and capacity metrics."
+        columns:
+          - name: stoid
+            tests:
+              - not_null
+              - unique
+      - name: standort_notfallversorgung
+        description: "Bundes-Klinik-Atlas emergency care capability flags by site."
+        columns:
+          - name: stoid
+            tests:
+              - not_null
+              - unique
+      - name: erkrankungen
+        description: "Bundes-Klinik-Atlas disease and treatment volumes by site."
+        columns:
+          - name: stoid
+            tests:
+              - not_null
+          - name: gruppe
+            tests:
+              - not_null
+      - name: fachabteilungen
+        description: "Bundes-Klinik-Atlas department-level case volumes by site."
+        columns:
+          - name: stoid
+            tests:
+              - not_null
+          - name: fabid
+            tests:
+              - not_null

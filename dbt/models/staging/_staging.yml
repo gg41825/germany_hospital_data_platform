@@ -1,0 +1,87 @@
+version: 2
+
+models:
+  - name: stg_bka__standort_kontakt
+    description: Standardized Bundes-Klinik-Atlas site master and contact attributes.
+    columns:
+      - name: standort_id
+        tests:
+          - not_null
+          - unique
+      - name: standort_name
+        tests:
+          - not_null
+      - name: bundesland_code
+        tests:
+          - not_null
+
+  - name: stg_bka__standort_struktur
+    description: Standardized Bundes-Klinik-Atlas site structure and staffing metrics.
+    columns:
+      - name: standort_id
+        tests:
+          - not_null
+          - unique
+      - name: anzahl_betten
+      - name: anzahl_faelle
+      - name: pflegepersonalquotient
+
+  - name: stg_bka__standort_notfallversorgung
+    description: Standardized Bundes-Klinik-Atlas emergency care capabilities by site.
+    columns:
+      - name: standort_id
+        tests:
+          - not_null
+          - unique
+      - name: emergency_level
+        tests:
+          - accepted_values:
+              arguments:
+                values: [0, 1, 2, 3, 9]
+      - name: emergency_level_description
+      - name: has_trauma_care_module
+      - name: trauma_care_description
+      - name: pediatric_emergency_level
+        tests:
+          - accepted_values:
+              arguments:
+                values: [0, 1, 2, 3]
+      - name: pediatric_emergency_description
+      - name: has_special_emergency_care
+      - name: special_emergency_description
+      - name: has_stroke_unit
+        tests:
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+      - name: stroke_unit_description
+      - name: has_chest_pain_unit
+      - name: chest_pain_unit_description
+      - name: is_not_classified_in_emergency_system
+        tests:
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+      - name: emergency_system_participation_description
+
+  - name: stg_bka__erkrankungen
+    description: Standardized Bundes-Klinik-Atlas disease and treatment volumes by site.
+    columns:
+      - name: standort_id
+        tests:
+          - not_null
+      - name: erkrankung_gruppe_code
+        tests:
+          - not_null
+      - name: anzahl
+
+  - name: stg_bka__fachabteilungen
+    description: Standardized Bundes-Klinik-Atlas department-level case volumes by site.
+    columns:
+      - name: standort_id
+        tests:
+          - not_null
+      - name: fachabteilung_id
+        tests:
+          - not_null
+      - name: anzahl_faelle
