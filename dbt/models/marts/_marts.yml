@@ -1,0 +1,92 @@
+version: 2
+
+models:
+  - name: dim_hospitals
+    description: Hospital site dimension built from Bundes-Klinik-Atlas contact, structure, and emergency care data.
+    columns:
+      - name: standort_id
+        tests:
+          - not_null
+          - unique
+      - name: standort_name
+        tests:
+          - not_null
+      - name: bundesland_code
+        tests:
+          - not_null
+      - name: anzahl_betten
+      - name: pflegepersonalquotient
+      - name: notfallstufe
+      - name: notfallstufe_beschreibung
+      - name: schwerverletztenversorgung_beschreibung
+      - name: kindernotfallversorgung_beschreibung
+      - name: spezialversorgung_beschreibung
+      - name: stroke_unit_beschreibung
+      - name: chest_pain_unit_beschreibung
+      - name: stufe_nicht_vereinbart_beschreibung
+
+  - name: fct_hospital_disease_volume
+    description: Hospital-level disease and procedure volume fact table enriched with hospital attributes.
+    columns:
+      - name: standort_id
+        tests:
+          - not_null
+      - name: standort_name
+        tests:
+          - not_null
+      - name: bundesland_code
+        tests:
+          - not_null
+      - name: erkrankung_gruppe_code
+        tests:
+          - not_null
+      - name: erkrankung_name
+        tests:
+          - not_null
+      - name: case_count
+      - name: notfallstufe_beschreibung
+
+  - name: fct_hospital_department_volume
+    description: Hospital-level department case volume fact table enriched with hospital attributes.
+    columns:
+      - name: standort_id
+        tests:
+          - not_null
+      - name: standort_name
+        tests:
+          - not_null
+      - name: bundesland_code
+        tests:
+          - not_null
+      - name: fachabteilung_id
+        tests:
+          - not_null
+      - name: fachabteilung_bezeichnung
+        tests:
+          - not_null
+      - name: case_count
+      - name: notfallstufe_beschreibung
+
+  - name: fct_hospital_disease_benchmarks
+    description: Hospital-level disease volume benchmarks within each German state and disease group.
+    columns:
+      - name: standort_id
+        tests:
+          - not_null
+      - name: standort_name
+        tests:
+          - not_null
+      - name: bundesland_code
+        tests:
+          - not_null
+      - name: erkrankung_gruppe_code
+        tests:
+          - not_null
+      - name: erkrankung_name
+        tests:
+          - not_null
+      - name: case_count
+      - name: notfallstufe_beschreibung
+      - name: state_avg_case_count
+      - name: case_count_vs_state_avg
+      - name: state_rank_for_disease
