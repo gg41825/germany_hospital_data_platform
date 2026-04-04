@@ -4,37 +4,37 @@ with disease_volume as (
 
 benchmarked as (
     select
-        standort_id,
-        standort_name,
-        bundesland_code,
-        traegerart,
-        notfallstufe,
-        notfallstufe_beschreibung,
-        erkrankung_gruppe_code,
-        erkrankung_name,
+        site_id,
+        site_name,
+        state_code,
+        owner_type,
+        emergency_level,
+        emergency_level_description,
+        disease_group_code,
+        disease_name,
         case_count,
         avg(case_count) over (
-            partition by bundesland_code, erkrankung_gruppe_code
+            partition by state_code, disease_group_code
         ) as state_avg_case_count,
         dense_rank() over (
-            partition by bundesland_code, erkrankung_gruppe_code
-            order by case_count desc nulls last, standort_id
+            partition by state_code, disease_group_code
+            order by case_count desc nulls last, site_id
         ) as state_rank_for_disease,
         count(*) over (
-            partition by bundesland_code, erkrankung_gruppe_code
+            partition by state_code, disease_group_code
         ) as hospitals_in_state_disease_group
     from disease_volume
 )
 
 select
-    standort_id,
-    standort_name,
-    bundesland_code,
-    traegerart,
-    notfallstufe,
-    notfallstufe_beschreibung,
-    erkrankung_gruppe_code,
-    erkrankung_name,
+    site_id,
+    site_name,
+    state_code,
+    owner_type,
+    emergency_level,
+    emergency_level_description,
+    disease_group_code,
+    disease_name,
     case_count,
     state_avg_case_count,
     case_count - state_avg_case_count as case_count_vs_state_avg,

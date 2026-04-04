@@ -7,15 +7,15 @@ hospitals as (
 )
 
 select
-    disease_volume.standort_id,
-    hospitals.standort_name,
-    hospitals.bundesland_code,
-    hospitals.traegerart,
-    hospitals.notfallstufe,
-    hospitals.notfallstufe_beschreibung,
-    disease_volume.erkrankung_gruppe_code,
-    disease_volume.erkrankung_name,
-    disease_volume.anzahl as case_count
+    disease_volume.site_id,
+    hospitals.site_name,
+    hospitals.state_code,
+    hospitals.owner_type,
+    hospitals.emergency_level,
+    hospitals.emergency_level_description,
+    disease_volume.disease_group_code,
+    disease_volume.disease_name,
+    disease_volume.case_count
 from disease_volume
 left join hospitals
-    on disease_volume.standort_id = hospitals.standort_id
+    on disease_volume.site_id = hospitals.site_id
