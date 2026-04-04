@@ -1,92 +1,130 @@
 version: 2
 
 models:
-  - name: dim_hospitals
-    description: Hospital site dimension built from Bundes-Klinik-Atlas contact, structure, and emergency care data.
+  - name: dim_department
+    description: Department dimension with raw source labels, normalized German names, and English and Traditional Chinese translations.
     columns:
-      - name: standort_id
+      - name: source_department_name
         tests:
           - not_null
           - unique
-      - name: standort_name
+      - name: department_name_de
+      - name: department_name_en
+      - name: department_name_zh
+
+  - name: dim_hospitals
+    description: Hospital site dimension built from Bundes-Klinik-Atlas contact, structure, and emergency care data.
+    columns:
+      - name: site_id
         tests:
           - not_null
-      - name: bundesland_code
+          - unique
+      - name: site_name
         tests:
           - not_null
-      - name: anzahl_betten
-      - name: pflegepersonalquotient
-      - name: notfallstufe
-      - name: notfallstufe_beschreibung
-      - name: schwerverletztenversorgung_beschreibung
-      - name: kindernotfallversorgung_beschreibung
-      - name: spezialversorgung_beschreibung
-      - name: stroke_unit_beschreibung
-      - name: chest_pain_unit_beschreibung
-      - name: stufe_nicht_vereinbart_beschreibung
+      - name: state_code
+        tests:
+          - not_null
+      - name: bed_count
+      - name: nursing_staff_ratio
+      - name: emergency_level
+      - name: emergency_level_description
+      - name: trauma_care_description
+      - name: pediatric_emergency_description
+      - name: special_emergency_description
+      - name: stroke_unit_description
+      - name: chest_pain_unit_description
+      - name: emergency_system_participation_description
 
   - name: fct_hospital_disease_volume
     description: Hospital-level disease and procedure volume fact table enriched with hospital attributes.
     columns:
-      - name: standort_id
+      - name: site_id
         tests:
           - not_null
-      - name: standort_name
+      - name: site_name
         tests:
           - not_null
-      - name: bundesland_code
+      - name: state_code
         tests:
           - not_null
-      - name: erkrankung_gruppe_code
+      - name: disease_group_code
         tests:
           - not_null
-      - name: erkrankung_name
+      - name: disease_name
         tests:
           - not_null
       - name: case_count
-      - name: notfallstufe_beschreibung
+      - name: emergency_level_description
 
   - name: fct_hospital_department_volume
     description: Hospital-level department case volume fact table enriched with hospital attributes.
     columns:
-      - name: standort_id
+      - name: site_id
         tests:
           - not_null
-      - name: standort_name
+      - name: site_name
         tests:
           - not_null
-      - name: bundesland_code
+      - name: state_code
         tests:
           - not_null
-      - name: fachabteilung_id
+      - name: department_id
         tests:
           - not_null
-      - name: fachabteilung_bezeichnung
+      - name: source_department_name
         tests:
           - not_null
+      - name: department_name_de
+      - name: department_name_en
+      - name: department_name_zh
       - name: case_count
-      - name: notfallstufe_beschreibung
+      - name: emergency_level_description
 
   - name: fct_hospital_disease_benchmarks
     description: Hospital-level disease volume benchmarks within each German state and disease group.
     columns:
-      - name: standort_id
+      - name: site_id
         tests:
           - not_null
-      - name: standort_name
+      - name: site_name
         tests:
           - not_null
-      - name: bundesland_code
+      - name: state_code
         tests:
           - not_null
-      - name: erkrankung_gruppe_code
+      - name: disease_group_code
         tests:
           - not_null
-      - name: erkrankung_name
+      - name: disease_name
         tests:
           - not_null
       - name: case_count
-      - name: notfallstufe_beschreibung
+      - name: emergency_level_description
       - name: state_avg_case_count
       - name: case_count_vs_state_avg
       - name: state_rank_for_disease
+
+  - name: mart_hospital_department_summary
+    description: Dashboard-ready summary table with each hospital's department mix and normalized department count.
+    columns:
+      - name: site_id
+        tests:
+          - not_null
+      - name: site_name
+        tests:
+          - not_null
+      - name: state_code
+        tests:
+          - not_null
+      - name: street
+      - name: postal_code
+      - name: city
+      - name: phone
+      - name: website_url
+      - name: email
+      - name: owner_type
+      - name: emergency_level
+      - name: emergency_level_description
+      - name: departments
+      - name: department_count
