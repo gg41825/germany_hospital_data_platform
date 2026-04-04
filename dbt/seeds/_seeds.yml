@@ -1,0 +1,53 @@
+version: 2
+
+seeds:
+  - name: department_normalization_mapping
+    description: Maps raw Bundes-Klinik-Atlas department labels to a user-defined main category used for analytics and dashboard grouping.
+    columns:
+      - name: source_department_name
+        description: Original department name from the source data.
+        tests:
+          - not_null
+          - unique
+      - name: normalized_department_name
+        description: Canonical department category selected for grouping related raw departments together.
+        tests:
+          - not_null
+
+  - name: hospital_department_mapping
+    description: Trilingual lookup table for displaying hospital department names in German, English, and Traditional Chinese.
+    columns:
+      - name: department_name_de
+        description: German department name used as the source-side reference label.
+        tests:
+          - not_null
+          - unique
+      - name: department_name_en
+        description: English translation of the department name.
+        tests:
+          - not_null
+      - name: department_name_zh
+        description: Traditional Chinese translation of the department name.
+        tests:
+          - not_null
+
+  - name: state_mapping
+    description: Lookup table for German federal state codes with German, English, and Traditional Chinese names.
+    columns:
+      - name: state_code
+        description: Source state code from the Bundes-Klinik-Atlas data.
+        tests:
+          - not_null
+          - unique
+      - name: state_name_de
+        description: German state name used as the canonical label.
+        tests:
+          - not_null
+      - name: state_name_en
+        description: English translation of the state name.
+        tests:
+          - not_null
+      - name: state_name_zh
+        description: Traditional Chinese translation of the state name.
+        tests:
+          - not_null
