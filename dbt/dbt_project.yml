@@ -1,0 +1,21 @@
+name: germany_hospital_data_platform
+version: "1.0.0"
+config-version: 2
+
+profile: germany_hospital_data_platform
+
+model-paths: ["models"]
+test-paths: ["tests"]
+macro-paths: ["macros"]
+packages-install-path: "dbt_packages"
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  germany_hospital_data_platform:
+    staging:
+      +materialized: view
+    marts:
+      +materialized: table
