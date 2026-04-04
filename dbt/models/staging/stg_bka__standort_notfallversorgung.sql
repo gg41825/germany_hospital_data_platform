@@ -5,7 +5,7 @@ with source as (
 
 typed as (
     select
-        cast(stoid as varchar) as standort_id,
+        cast(stoid as varchar) as site_id,
         cast(stufe as integer) as stufe,
         cast(schwerverletztenversorgung as integer) as schwerverletztenversorgung,
         cast(kinder as integer) as kinder,
@@ -19,7 +19,7 @@ typed as (
 
 renamed as (
     select
-        standort_id,
+        site_id,
 
         -- Emergency level
         stufe as emergency_level,

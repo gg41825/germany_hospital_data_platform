@@ -4,23 +4,23 @@ with source as (
 
 renamed as (
     select
-        cast(stoid as varchar) as standort_id,
-        cast(land as varchar) as bundesland_code,
-        cast(name as varchar) as standort_name,
-        cast(strasse as varchar) as strasse,
-        cast(plz as varchar) as plz,
-        cast(ort as varchar) as ort,
+        cast(stoid as varchar) as site_id,
+        cast(land as varchar) as state_code,
+        cast(name as varchar) as site_name,
+        cast(strasse as varchar) as street,
+        cast(plz as varchar) as postal_code,
+        cast(ort as varchar) as city,
         cast(url as varchar) as website_url,
-        cast(telefon as varchar) as telefon,
+        cast(telefon as varchar) as phone,
         cast(email as varchar) as email,
-        cast(traegerart as varchar) as traegerart,
-        cast(kinderklinik as integer) as hat_kinderklinik,
-        cast(sicherstellungsauftrag as integer) as hat_sicherstellungsauftrag,
-        cast(georeferenzzone as varchar) as georeferenz_zone,
-        cast(georeferenzost as double precision) as georeferenz_ost,
-        cast(georeferenznord as double precision) as georeferenz_nord,
-        cast(laengengrad as double precision) as laengengrad,
-        cast(breitengrad as double precision) as breitengrad
+        cast(traegerart as varchar) as owner_type,
+        cast(kinderklinik as integer) as has_pediatric_clinic,
+        cast(sicherstellungsauftrag as integer) as has_service_mandate,
+        cast(georeferenzzone as varchar) as georeference_zone,
+        cast(georeferenzost as double precision) as georeference_easting,
+        cast(georeferenznord as double precision) as georeference_northing,
+        cast(laengengrad as double precision) as longitude,
+        cast(breitengrad as double precision) as latitude
     from source
     where stoid is not null
 )

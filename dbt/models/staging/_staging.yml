@@ -4,32 +4,32 @@ models:
   - name: stg_bka__standort_kontakt
     description: Standardized Bundes-Klinik-Atlas site master and contact attributes.
     columns:
-      - name: standort_id
+      - name: site_id
         tests:
           - not_null
           - unique
-      - name: standort_name
+      - name: site_name
         tests:
           - not_null
-      - name: bundesland_code
+      - name: state_code
         tests:
           - not_null
 
   - name: stg_bka__standort_struktur
     description: Standardized Bundes-Klinik-Atlas site structure and staffing metrics.
     columns:
-      - name: standort_id
+      - name: site_id
         tests:
           - not_null
           - unique
-      - name: anzahl_betten
-      - name: anzahl_faelle
-      - name: pflegepersonalquotient
+      - name: bed_count
+      - name: case_count
+      - name: nursing_staff_ratio
 
   - name: stg_bka__standort_notfallversorgung
     description: Standardized Bundes-Klinik-Atlas emergency care capabilities by site.
     columns:
-      - name: standort_id
+      - name: site_id
         tests:
           - not_null
           - unique
@@ -67,21 +67,23 @@ models:
   - name: stg_bka__erkrankungen
     description: Standardized Bundes-Klinik-Atlas disease and treatment volumes by site.
     columns:
-      - name: standort_id
+      - name: site_id
         tests:
           - not_null
-      - name: erkrankung_gruppe_code
+      - name: disease_name
+      - name: disease_group_code
         tests:
           - not_null
-      - name: anzahl
+      - name: case_count
 
   - name: stg_bka__fachabteilungen
     description: Standardized Bundes-Klinik-Atlas department-level case volumes by site.
     columns:
-      - name: standort_id
+      - name: site_id
         tests:
           - not_null
-      - name: fachabteilung_id
+      - name: department_id
         tests:
           - not_null
-      - name: anzahl_faelle
+      - name: source_department_name
+      - name: case_count
