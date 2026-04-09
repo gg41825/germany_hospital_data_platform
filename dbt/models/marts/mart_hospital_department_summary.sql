@@ -15,6 +15,20 @@ select
     hospitals.street,
     hospitals.postal_code,
     hospitals.city,
+    concat_ws(
+        ', ',
+        nullif(trim(hospitals.street), ''),
+        nullif(trim(concat_ws(' ', hospitals.postal_code, hospitals.city)), '')
+    ) as address,
+    case
+        when hospitals.latitude is not null and hospitals.longitude is not null then
+            concat(
+                'https://www.google.com/maps/search/?api=1&query=',
+                hospitals.latitude,
+                ',',
+                hospitals.longitude
+            )
+    end as google_map_url,
     hospitals.phone,
     hospitals.website_url,
     hospitals.email,
@@ -36,6 +50,8 @@ group by
     hospitals.street,
     hospitals.postal_code,
     hospitals.city,
+    hospitals.latitude,
+    hospitals.longitude,
     hospitals.phone,
     hospitals.website_url,
     hospitals.email,

@@ -120,6 +120,8 @@ models:
       - name: street
       - name: postal_code
       - name: city
+      - name: address
+      - name: google_map_url
       - name: phone
       - name: website_url
       - name: email
