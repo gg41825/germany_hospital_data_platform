@@ -18,18 +18,24 @@ Data Source: [Bundes-Klinik-Atlas open data](https://bundes-klinik-atlas.de/open
 
 ```text
 Bundes-Klinik-Atlas XML
-        |
-        v
-Python ingestion
-        |
-        v
-PostgreSQL (raw → analytics)
-        |
-        v
-dbt (staging → marts)
-        |
-        v
-Metabase dashboards
+    |
+    v
+Ingestion (Python)
+    |
+    v
+Postgres
+  raw schema / landing tables
+    |
+    v
+dbt transformation on Postgres
+  staging / marts / tests
+    |
+    v
+analytics-ready warehouse tables
+    |
+    +--> Metabase
+    +--> FastAPI
+    +--> Analytics
 ```
 ---
 ## Tech Stack
@@ -37,6 +43,7 @@ Metabase dashboards
 - dbt for transformation and testing
 - Python for ingestion
 - Metabase for dashboards
+- FastAPI for application and API serving
 - GitHub Actions for CI
 ---
 ## Data Model
@@ -61,12 +68,13 @@ Metabase dashboards
 ### 1. Setup Python Environment
 
 ```bash
-python -m venv venv
+python3 -m venv venv
 source venv/bin/activate  # macOS / Linux
 # venv\Scripts\activate   # Windows
 
 pip install --upgrade pip
 pip install -r ingestion/requirements.txt
+pip install -r api/requirements.txt
 ```
 
 ### 2. Set Environment Variables
@@ -87,7 +95,7 @@ export DBT_TARGET=dev
 
 ### 3. Load Data
 ```bash
-python ingestion/load_bka_xml.py ingestion/fixtures/bka_ci_data.xml --raw-schema "${RAW_SCHEMA}"
+python3 ingestion/load_bka_xml.py ingestion/fixtures/bka_ci_data.xml --raw-schema "${RAW_SCHEMA}"
 ```
 
 ### 4. Run dbt
@@ -100,6 +108,14 @@ dbt build --profiles-dir . --profile "${DBT_PROFILE}" --target "${DBT_TARGET}"
 ```bash
 dbt docs generate --profiles-dir . --profile "${DBT_PROFILE}" --target "${DBT_TARGET}"
 ```
+
+### 6. Run API
+```bash
+python -m uvicorn api.main:app --reload --port 8000
+```
+
+The API uses the same PostgreSQL environment variables as ingestion and dbt.
+Open `http://127.0.0.1:8000/docs` for the interactive API docs.
 ---
 ## CI
 The repository includes a GitHub Actions workflow for dbt validation.
@@ -114,6 +130,12 @@ This workflow is intended to verify that:
 - dbt models build successfully
 - data tests pass
 - the transformation pipeline remains reproducible in a clean environment
+---
+## Serving Layer
+- Metabase reads analytics tables for dashboards and self-service exploration.
+- FastAPI can expose curated hospital and department endpoints backed by dbt marts.
+- Analysts can query the same warehouse tables directly from notebooks or SQL clients.
+- Current API endpoints include `/health`, `/hospitals`, and `/hospitals/{site_id}`.
 ---
 ## Notes on Dashboard Semantics
 - `state_code` can be mapped to human-readable names via `state_mapping`
