@@ -1,5 +1,4 @@
 # Germany Hospital Data Platform
-🔗 [Live Dashboard](https://metabase-511455343813.europe-west3.run.app/public/dashboard/f13e90c4-dfab-45d5-bcef-17255b0696ad)
 
 This project transforms Bundes-Klinik-Atlas open data into an analysis-ready data platform for exploring hospitals in Germany.
 
